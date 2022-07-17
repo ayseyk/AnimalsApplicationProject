@@ -1,12 +1,16 @@
 package com.example.animalsapp.view
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation
-import com.example.animalsapp.R
+import androidx.fragment.app.Fragment
+import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.animalsapp.databinding.FragmentDetailBinding
 import com.example.animalsapp.model.Animal
 import com.example.animalsapp.util.getProgressDrawable
@@ -15,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.item_animal.*
 import kotlinx.android.synthetic.main.item_animal.animalImage
 import kotlinx.android.synthetic.main.item_animal.animalName
-
 
 class DetailFragment : Fragment() {
 
@@ -48,6 +51,28 @@ class DetailFragment : Fragment() {
         animalLocation.text = animal?.location
         animalLifespan.text = animal?.lifeSpan
         animalDiet.text = animal?.diet
+
+        animal?.imageUrl?.let{
+            setupBackgrounColor(it)
+        }
     }
 
+    private fun setupBackgrounColor(url : String){
+        Glide.with(this)
+            .asBitmap()
+            .load(url)
+            .into(object: CustomTarget<Bitmap>(){
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Palette.from(resource)
+                        .generate(){palette ->
+                            val intColor = palette?.lightMutedSwatch?.rgb ?: 0
+                            binding.animalLayout.setBackgroundColor(intColor)
+                        }
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                }
+
+            })
+    }
 }
