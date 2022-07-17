@@ -8,6 +8,10 @@
         <variable
             name="animal"
             type = "com.example.animalsapp.model.Animal"/>
+        
+        <variable
+            name="palette"
+            type="com.example.animalsapp.model.AnimalPalette" />
 
     </data>
 
@@ -15,6 +19,7 @@
         android:id="@+id/animalLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@{palette.color}"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         tools:context=".view.DetailFragment">
